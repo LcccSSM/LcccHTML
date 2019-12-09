@@ -1,6 +1,5 @@
 <template>
-	daol
-<!--  <div class="login-wrap">
+ <div class="login-wrap">
     <div class="login-container">
       <h1 class="title">{{msg}}</h1>
       <el-form :rules="rules">
@@ -17,7 +16,7 @@
         </el-row>
       </el-form>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
