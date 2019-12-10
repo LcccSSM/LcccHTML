@@ -15,7 +15,7 @@
 				<el-row>
 					<el-button class="btn" type="primary" v-on:click="dolick()">登录</el-button>
 				</el-row>
-				<el-row style="text-align: center;">
+				<el-row style="text-align: center;margin-top: 10px;">
 					<router-link to="/Register">注册用户</router-link>
 					<router-link to="/Login" >用户名登录</router-link>
 				</el-row>

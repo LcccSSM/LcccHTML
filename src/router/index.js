@@ -4,42 +4,64 @@ import HelloWorld from '@/components/HelloWorld'
 import App from '@/App'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
-import a from '@/views/a'
 import Phone from '@/views/Phone'
-
+import BorrowingIndex from '@/views/borrowing/borrowingIndex'
+import AppMain from '@/views/AppMain'
+import Index from '@/views/index'
 Vue.use(Router)
 
 export default new Router({
 	routes: [{
+			//主页
 			path: '/',
-			name: 'Login',
-			component: Login,
-// 			children:[{
-// 					path:'/Phone',
-// 					name:'Phone',
-// 					component:Phone
-// 			},]
+			name: "AppMain",
+			component: AppMain,
+			children: [{
+					path: "/",
+					name: "首页",
+					component: Index
+				},
+				{
+					path: '/Index',
+					name: 'Index',
+					component: Index
+				},
+				{ //借贷主页
+					path: '/BorrowingIndex',
+					name: 'BorrowingIndex',
+					component: BorrowingIndex
+				},
+				{ //注册
+					path: '/Login',
+					name: "Login",
+					component: Login,
+				},
+				{
+					path: '/Register',
+					name: 'Register',
+					component: Register
+				},
+				{
+					path: '/Phone',
+					name: 'Phone',
+					component: Phone
+				},
+			]
 		},
-		{
+		{ //注册
 			path: '/Login',
 			name: "Login",
 			component: Login,
 		},
 		{
-			path:'/Register',
-			name:'Register',
-			component:Register
+			path: '/Register',
+			name: 'Register',
+			component: Register
 		},
 		{
-			path:'/a',
-			name:'a',
-			component:a
+			path: '/Phone',
+			name: 'Phone',
+			component: Phone
 		},
-		{
-			path:'/Phone',
-			name:'Phone',
-			component:Phone
-		},
-		
 	]
 })

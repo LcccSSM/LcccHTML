@@ -15,8 +15,8 @@
 				<el-input placeholder="请输入手机号码" v-model="ruleForm.phone" autocomplete="off"></el-input>
 			</el-form-item>
 			<el-form-item prop="yzm" label-width="580px" style="width: 62%;">
-				<div style="width:1320px; margin-left: -478px;" >
-					<el-input style="width:19%" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
+				<div style="width:1270px; margin-left: -465px;" >
+					<el-input style="width:17%" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
 					<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
 				</div>
 			</el-form-item>
