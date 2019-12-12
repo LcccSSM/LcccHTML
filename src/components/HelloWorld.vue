@@ -13,6 +13,11 @@
           <el-button type="primary" icon="el-icon-circle-plus-outline" size="small">还款信息</el-button>
         </router-link>
       </li>
+      <li>
+        <router-link to="/loan/LoantIndex">
+          <el-button type="primary" icon="el-icon-circle-plus-outline" size="small">还款信息</el-button>
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
