@@ -5,7 +5,7 @@
 				<el-menu-item index="/Index" style="margin-left: 950px;font-size: 15px;">首页</el-menu-item>
 				<el-menu-item index="2" style="font-size: 15px;">我要出借</el-menu-item>
 				<el-menu-item index="/BorrowingIndex" style="font-size: 15px;">我要借款/还款</el-menu-item>
-				<el-menu-item index="4" style="font-size: 15px;">注册/登录</el-menu-item>
+				<el-menu-item index="/Login" style="font-size: 15px;">注册/登录</el-menu-item>
 			</el-menu>
 		</div>
 	</div>
