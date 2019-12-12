@@ -10,11 +10,6 @@
       </el-main>
     </el-container>
 
-    <!-- <el-container>
-      <el-header>
-        <BottomNav></BottomNav>
-      </el-header>
-    </el-container> -->
 
   </el-row>
 
