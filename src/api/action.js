@@ -21,9 +21,11 @@ export default {
   'SYSTEM_LOAN_BYUPDATE': '/loan_ByUpdate', //修改借款信息
   'SYSTEM_LOAN_BYDEL': '/loan_ByDel', //删除借款信息
   'SYSTEM_LOAN_BYADD': '/loan_ByAdd', //添加借款信息
-  
 
+  'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage',//产品库存
 
+	'LCCCSSM_ADDUSER': '/addUser',//用户注册
+	'LCCCSSM_YZM': '/YZM',//手机短信
 
 
   'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage', //产品库存
