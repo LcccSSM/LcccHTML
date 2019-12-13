@@ -286,7 +286,6 @@
         this.mergeForm.verifytime = new Date().getTime();
         this.$refs['mergeForm'].validate((valid) => {
           if (valid) {
-            // alert('submit!');
             let url = this.axios.urls.SYSTEM_LOAN_BYUPDATE;
             this.axios.post(url, this.mergeForm).then(resp => {
               if (1 == resp.data) {
