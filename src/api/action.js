@@ -27,7 +27,9 @@ export default {
 	'LCCCSSM_ADDUSER': '/addUser',//用户注册
 	'LCCCSSM_YZM': '/YZM',//手机短信
 
-
+	//树菜单系列
+	'SYSTEM_MENU':'/listByFunction',
+	
   'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage', //产品库存
 
 

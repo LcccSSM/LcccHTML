@@ -10,6 +10,7 @@ import Phone from '@/views/Phone'
 import BorrowingIndex from '@/views/borrowing/borrowingIndex'
 import AppMain from '@/views/AppMain'
 import Index from '@/views/index'
+import MenuAppMain from '@/views/MenuAppMain'
 
 Vue.use(Router)
 
@@ -23,6 +24,7 @@ export default new Router({
 					path: "/",
 					name: "首页",
 					component: Index
+
 				},
 				{
 					path: '/Index',
@@ -81,5 +83,10 @@ export default new Router({
 			name: 'Phone',
 			component: Phone
 		},
+		{
+			path:"/MenuAppMain",
+			name:'树菜单',
+			component:MenuAppMain
+		}
 	]
 })
