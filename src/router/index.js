@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import DictIndex from '@/views/dict/DictIndex'
-import LoantIndex from '@/views/loan/LoantIndex'
 import App from '@/App'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
@@ -10,8 +8,8 @@ import Phone from '@/views/Phone'
 import BorrowingIndex from '@/views/borrowing/borrowingIndex'
 import AppMain from '@/views/AppMain'
 import Index from '@/views/index'
-import MenuAppMain from '@/views/MenuAppMain'
-
+import UserInfo from '@/views/User/UserInfo'
+import UserAccount from '@/views/User/UserAccount'
 Vue.use(Router)
 
 export default new Router({
@@ -24,7 +22,6 @@ export default new Router({
 					path: "/",
 					name: "首页",
 					component: Index
-
 				},
 				{
 					path: '/Index',
@@ -51,21 +48,16 @@ export default new Router({
 					name: 'Phone',
 					component: Phone
 				},
-        {
-          path: '/HelloWorld',
-          name: 'HelloWorld',
-          component: HelloWorld
-        },
-        {
-          path: '/dict/DictIndex',
-          name: 'DictIndex',
-          component: DictIndex
-        },
-        {
-          path: '/loan/LoantIndex',
-          name: 'LoantIndex',
-          component: LoantIndex
-        }
+				{
+					path: '/UserInfo',
+					name: 'UserInfo',
+					component: UserInfo
+				},
+				{
+					path: '/UserAccount',
+					name: 'UserAccount',
+					component: UserAccount
+				},
 			]
 		},
 		{ //注册
@@ -83,10 +75,5 @@ export default new Router({
 			name: 'Phone',
 			component: Phone
 		},
-		{
-			path:"/MenuAppMain",
-			name:'树菜单',
-			component:MenuAppMain
-		}
 	]
 })

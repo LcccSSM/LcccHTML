@@ -1,131 +1,121 @@
 <template>
-	<div class="login-wrap">
-		<div class="login-container">
-			<h2 class="title">{{msg}}</h2>
-			<el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-				<el-form-item prop="phone">
-					<el-input v-model="ruleForm.phone" placeholder="请输入手机号码"></el-input>
-				</el-form-item>
-				<el-form-item prop="yzm">
-					<div>
-						<el-input style="width:66%" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
-						<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
-					</div>
-				</el-form-item>
-				<el-row>
-					<el-button class="btn" type="primary" v-on:click="dolick()">登录</el-button>
-				</el-row>
-				<el-row style="text-align: center;margin-top: 10px;">
-					<router-link to="/Register">注册用户</router-link>
-					<router-link to="/Login">用户名登录</router-link>
-				</el-row>
-			</el-form>
+	<!-- <div class="login-wrap"> -->
+	<div class="login-container" :model="ruleForm">
+		<el-form :model="ruleForm" ref="ruleForm">
+			<div style="margin-top: -3px;">
+				<b>您的基础信息：</b>
+			</div>
+			<div style="margin-top: 20px; margin-left: 30px;">
+				用户名：{{resturantName}}
+			</div>
+			<div style="margin-top: 20px; margin-left: 30px;">
+				<div v-if="this.ruleForm.phone !='' ">
+					绑定的手机号码：{{this.ruleForm.phone}}
+					<el-link style="margin-left: 20px;" type="primary">修改手机号码</el-link>
+				</div>
+				<div v-else-if="this.ruleForm.phone =='' ">
+					绑定的手机号码：未绑定
+					<el-link style="margin-left: 20px;" type="primary">绑定手机号码</el-link>
+				</div>
+			</div>
+			<el-divider></el-divider>
+			<div style="margin-top: 20px;">
+				<b>您的安全服务：</b>
+			</div>
 
-		</div>
+			<div style="margin-top: 35px; margin-left: 30px;">
+				身份证认证：
+				<div v-if="this.ruleForm.realnamecheck == 1">
+					<el-link style="margin-left: 30px;" type="primary">查看</el-link>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
+				</div>
+				<div v-else-if="this.ruleForm.realnamecheck == 0">
+					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">身份证认证</el-link>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
+				</div>
+			</div>
+
+			<div style="margin-top: 35px; margin-left: 30px;">
+				登录密码：
+				<el-link style="margin-left: 30px; margin-left: 165px;" type="primary">修改密码</el-link>
+				<span><img align="right" style="margin-top: -25px;" src="../../assets/ysz.png" /> </span>
+			</div>
+			<div style="margin-top: 35px; margin-left: 30px;">
+				邮箱认证：
+				<div v-if="this.ruleForm.realnamecheck == 1">
+					<el-link style="margin-left: 30px;margin-left: 250px;" type="primary">查看</el-link>
+					<span><img align="right" style="margin-top: -25px;" src="../../assets/ywc.png" /> </span>
+				</div>
+				<div v-else-if="this.ruleForm.realnamecheck == 0">
+					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">绑定</el-link>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
+				</div>
+
+			</div>
+			<div style="margin-top: 35px; margin-left: 30px;">
+				绑定手机：
+				<div v-if=" this.ruleForm.phonecheck == 1">
+					<el-link style="margin-left: 250px;" type="primary">查看</el-link>
+					<span><img align="right" style="margin-top: -25px;" src="../../assets/ybd.png" /> </span>
+				</div>
+				<div v-else-if=" this.ruleForm.phonecheck == 0">
+					<el-link style="margin-left: 250px;" type="primary">绑定号码</el-link>
+					<span><img align="right" style="margin-top: -25px;" src="../../assets/wsz.png" /> </span>
+				</div>
+			</div>
+
+
+
+
+
+		</el-form>
 	</div>
+	<!-- </div> -->
 </template>
 
 <script>
+	name: 'UserAccount'
 	export default {
-		name: 'Phone',
 		data() {
-			var phone = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('请输入手机号码'));
-				} else if (!(/^1[3456789]\d{9}$/.test(value))) {
-					callback(new Error('手机号格式不正确！'));
-				} else {
-					callback();
-				}
-			};
-			var yzm = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('请输入验证码'));
-				} else {
-					callback();
-				}
-			};
 			return {
-				msg: '手机登录',
-				getCode: '获取验证码',
-				isGeting: false,
-				count: 60,
-				disable: false,
-				yzm2: '',
 				ruleForm: {
-					phone: '',
-					yzm: ''
-				},
-				rules: {
-					phone: [{
-						validator: phone,
-						trigger: 'blur'
-					}],
-					yzm: [{
-						validator: yzm,
-						trigger: 'blur'
-					}],
-				},
+					username: '',
+					phone: '', //手机绑定
+					loginpass: '', //登录密码
+					email: '', //用户邮箱
+					asidcardno: '', //身份证号码
+					realnamecheck: '', //身份证认证
+					emailcheck: '', //邮箱认证
+					phonecheck: '', //手机认证
+				}
 			};
 		},
 		methods: {
-			getVerifyCode() {
-				var url = this.axios.urls.LCCCSSM_YZM;
-				alert("phone:" + this.ruleForm.phone);
+			look: function() {
+				var url = this.axios.urls.LCCCSSM_SELECTNAME;
+				this.ruleForm.username = this.$store.state.resturantName;
 				this.axios.post(url, this.ruleForm).then(resp => {
-					alert(resp.data.code);
-					if (1 == resp.data.code) {
-						this.yzm2 = resp.data.message;
-					} else {
-						this.$message.error('短信发送失败！');
-					}
-					console.log(resp);
-				}).catch(resp => {
-					this.$message.error('验证码操作失败！');
-				});
-				var countDown = setInterval(() => {
-					if (this.count < 1) {
-						this.isGeting = false;
-						this.disable = false;
-						this.getCode = '获取验证码';
-						this.count = 60;
-						clearInterval(countDown);
-					} else {
-						this.isGeting = true;
-						this.disable = true;
-						this.getCode = this.count-- + 's后重发';
-					}
-				}, 1000);
-			},
-			dolick:function(){
-				if(this.ruleForm.yzm == this.yzm2){
-					var url = this.axios.urls.LCCCSSM_SELECTPHONEJS;
-					this.axios.post(url, this.ruleForm).then(resp => {
-						if (0 == resp.data.code) {
-							this.$router.push({
-								path: '/index'
-							});
-						} else {
-							this.$message.error("该手机账号不存在！");
-						}
-					}).catch(resp => {
-						this.$message.error('登录超时，请稍后重试！');
-					});
-				}else{
-					this.$message.error('验证码错误！');
-				}
-			}
-		}
+					this.ruleForm = resp.data;
 
+
+				}).catch(resp => {
+					console.log(resp);
+					this.$message.error('操作失败！');
+				});
+			}
+		},
+		computed: {
+			resturantName: function() {
+				return this.$store.state.resturantName; //不建议
+			}
+		},
+		created: function() {
+			this.look();
+		}
 	}
 </script>
 
 <style>
-	.codeGeting {
-		background: #cdcdcd;
-		border-color: #cdcdcd;
-	}
-
 	.login-wrap {
 		box-sizing: border-box;
 		width: 100%;
@@ -142,7 +132,7 @@
 	.login-container {
 		border-radius: 10px;
 		margin: 0px auto;
-		width: 350px;
+		width: 550px;
 		padding: 30px 35px 15px 35px;
 		background: #fff;
 		border: 1px solid #eaeaea;

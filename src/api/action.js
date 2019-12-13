@@ -21,15 +21,19 @@ export default {
   'SYSTEM_LOAN_BYUPDATE': '/loan_ByUpdate', //修改借款信息
   'SYSTEM_LOAN_BYDEL': '/loan_ByDel', //删除借款信息
   'SYSTEM_LOAN_BYADD': '/loan_ByAdd', //添加借款信息
-
-  'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage',//产品库存
-
+	
+	
+	//用户系列
 	'LCCCSSM_ADDUSER': '/addUser',//用户注册
 	'LCCCSSM_YZM': '/YZM',//手机短信
+	'LCCCSSM_SELECTNAMEJS': '/selectNameJS',//根据用户名查询用户信息 JSON格式
+	'LCCCSSM_SELECTNAME': '/selectName',//根据用户名查询用户信息 对象格式
+	'LCCCSSM_SELECTPHONEJS': '/selectPhoneJS',//用户注册验证手机是否已注册接口
+	'LCCCSSM_SELECTPHONE': '/selectPhone',//用户使用手机登录接口
+	'LCCCSSM_SELECTNAMEPASS': '/selectNamePass',//用户登录，账号密码登录接口
 
 	//树菜单系列
 	'SYSTEM_MENU':'/listByFunction',
-	
   'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage', //产品库存
 
 
