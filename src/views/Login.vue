@@ -4,23 +4,20 @@
 			<!-- <router-view></router-view> -->
 			<h2 class="title">{{msg}}</h2>
 			<el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-				<el-form-item prop="uName">
-					<el-input v-model="form.usrName" placeholder="用户名"></el-input>
+				<el-form-item prop="username">
+					<el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
 				</el-form-item>
-			</el-form>
-			<el-form>
-				<el-form-item prop="uPwd">
-					<el-input type="password" v-model="form.usrPassword" placeholder="密码"></el-input>
+				<el-form-item prop="loginpass">
+					<el-input type="password" v-model="ruleForm.loginpass" placeholder="密码"></el-input>
 				</el-form-item>
 				<el-row>
-					<el-button class="btn" type="primary" v-on:click="dolick()">登录</el-button>
+					<el-button class="btn" type="primary" @click="dolick()">登录</el-button>
 				</el-row>
 				<el-row style="text-align: center; margin-top: 10px;">
 					<router-link to="/Register">注册用户</router-link>
 					<router-link to="/Phone" > 手机号码登录</router-link>
 				</el-row>
 			</el-form>
-			
 		</div>
 	</div>
 </template>
@@ -33,12 +30,12 @@
 		data: function() {
 			return {
 				msg: '用户登录',
-				form: {
-					usrName: '',
-					usrPassword: ''
+				ruleForm: {
+					username: '',
+					loginpass: ''
 				},
 				rules: {
-					uName: [{
+					username: [{
 							required: true,
 							message: '请输入账号',
 							trigger: 'blur'
@@ -46,19 +43,19 @@
 						{
 							min: 2,
 							max: 9,
-							message: '长度在 4 到 9 个字符',
+							message: '长度在 4 到 10 个字符',
 							trigger: 'blur'
 						}
 					],
-					uPwd: [{
+					loginpass: [{
 							required: true,
 							message: '请输入密码',
-							trigger: 'change'
+							trigger: 'blur'
 						},
 						{
-							min: 6,
-							max: 18,
-							message: '长度在 6 到 18 个字符',
+							min: 3,
+							max: 16,
+							message: '长度在 8 到 16 个字符',
 							trigger: 'blur'
 						}
 					]
@@ -70,25 +67,22 @@
 			doMutation: function() {
 				this.$store.commit({
 					type: 'setResturantName',
-					resturantName: this.form.usrName
+					resturantName: this.ruleForm.username
 				})
 			},
 			dolick: function() {
-				console.log(this.form);
-				var url = this.axios.urls.SYSTEM_LOGIN;
-				this.axios.post(url, this.form).then(resp => {
+				var url = this.axios.urls.LCCCSSM_SELECTNAMEPASS;
+				this.axios.post(url, this.ruleForm).then(resp => {
 					if (1 == resp.data.code) {
 						this.doMutation();
 						this.$router.push({
-							path: '/AppMain'
+							path: '/index'
 						});
-					} else {
-						this.$message.error('O NO！');
+					}else{
+						this.$message.error(resp.data.message);
 					}
-					console.log(resp);
 				}).catch(resp => {
-					console.log(resp);
-					this.$message.error('O NO！');
+					this.$message.error('登录超时，请稍后重试！');
 				});
 			}
 		}

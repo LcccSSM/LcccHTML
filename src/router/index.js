@@ -8,6 +8,8 @@ import Phone from '@/views/Phone'
 import BorrowingIndex from '@/views/borrowing/borrowingIndex'
 import AppMain from '@/views/AppMain'
 import Index from '@/views/index'
+import UserInfo from '@/views/User/UserInfo'
+import UserAccount from '@/views/User/UserAccount'
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +47,16 @@ export default new Router({
 					path: '/Phone',
 					name: 'Phone',
 					component: Phone
+				},
+				{
+					path: '/UserInfo',
+					name: 'UserInfo',
+					component: UserInfo
+				},
+				{
+					path: '/UserAccount',
+					name: 'UserAccount',
+					component: UserAccount
 				},
 			]
 		},

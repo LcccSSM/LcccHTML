@@ -1,131 +1,69 @@
 <template>
-	<div class="login-wrap">
-		<div class="login-container">
-			<h2 class="title">{{msg}}</h2>
-			<el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-				<el-form-item prop="phone">
-					<el-input v-model="ruleForm.phone" placeholder="请输入手机号码"></el-input>
-				</el-form-item>
-				<el-form-item prop="yzm">
-					<div>
-						<el-input style="width:66%" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
-						<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
+		<div class="login-wrap">
+			<div class="login-container" :model="ruleForm">
+				<el-form :model="ruleForm" ref="ruleForm" >
+					<div style="margin-top: -3px;">
+						<b>当前头像:</b>
 					</div>
-				</el-form-item>
-				<el-row>
-					<el-button class="btn" type="primary" v-on:click="dolick()">登录</el-button>
-				</el-row>
-				<el-row style="text-align: center;margin-top: 10px;">
-					<router-link to="/Register">注册用户</router-link>
-					<router-link to="/Login">用户名登录</router-link>
-				</el-row>
-			</el-form>
-
+					<el-avatar style="margin-left: 120px;" shape="square" :size="100" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+					<div style="margin-top: 15px;">
+						<b>昵称： </b>
+						<b style="margin-left: 100px;">{{resturantName}}</b>
+					</div>
+					<div style="margin-top: 20px;">
+						<b>账户总额： </b>
+						<b style="margin-left: 57px;">{{this.ruleForm.totalmoney}}元</b>
+					</div>
+					<div style="margin-top: 25px;">
+						<b>待还金额： </b>
+						<b style="margin-left: 57px;">{{this.ruleForm.unReturnAmoney}}元</b>
+					</div>
+					<div style="margin-top: 30px;">
+						<b>单期还款： </b>
+						<b style="margin-left: 57px;">{{this.ruleForm.unReturnAmount}}元</b>
+					</div>
+					<div style="margin-top: 30px;">
+						<b>授信额度： </b>
+						<b style="margin-left: 57px;">{{this.ruleForm.borrowLimit}}元</b>
+					</div>
+					<div style="margin-top: 30px;">
+						<b>剩余授信额度： </b>
+						<b style="margin-left: 23px;">{{this.ruleForm.remainBorrowLimit}}元</b>
+					</div>
+				</el-form>
+			</div>
 		</div>
-	</div>
 </template>
 
 <script>
+	import axios from 'axios'
+	import qs from 'qs'
 	export default {
-		name: 'Phone',
+		name: 'UserInfo',
 		data() {
-			var phone = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('请输入手机号码'));
-				} else if (!(/^1[3456789]\d{9}$/.test(value))) {
-					callback(new Error('手机号格式不正确！'));
-				} else {
-					callback();
-				}
-			};
-			var yzm = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('请输入验证码'));
-				} else {
-					callback();
-				}
-			};
 			return {
-				msg: '手机登录',
-				getCode: '获取验证码',
-				isGeting: false,
-				count: 60,
-				disable: false,
-				yzm2: '',
-				ruleForm: {
-					phone: '',
-					yzm: ''
-				},
-				rules: {
-					phone: [{
-						validator: phone,
-						trigger: 'blur'
-					}],
-					yzm: [{
-						validator: yzm,
-						trigger: 'blur'
-					}],
-				},
+				ruleForm:{
+					username:'',//用户昵称
+					totalmoney:'6000',//资金总额
+					unReturnAmoney:'1500',//待还总额
+					unReturnAmount:'500',//单期还款
+					borrowLimit:'3500',//授信额度
+					remainBorrowLimit:'2000',//剩余授信额度
+				}
 			};
 		},
-		methods: {
-			getVerifyCode() {
-				var url = this.axios.urls.LCCCSSM_YZM;
-				alert("phone:" + this.ruleForm.phone);
-				this.axios.post(url, this.ruleForm).then(resp => {
-					alert(resp.data.code);
-					if (1 == resp.data.code) {
-						this.yzm2 = resp.data.message;
-					} else {
-						this.$message.error('短信发送失败！');
-					}
-					console.log(resp);
-				}).catch(resp => {
-					this.$message.error('验证码操作失败！');
-				});
-				var countDown = setInterval(() => {
-					if (this.count < 1) {
-						this.isGeting = false;
-						this.disable = false;
-						this.getCode = '获取验证码';
-						this.count = 60;
-						clearInterval(countDown);
-					} else {
-						this.isGeting = true;
-						this.disable = true;
-						this.getCode = this.count-- + 's后重发';
-					}
-				}, 1000);
-			},
-			dolick:function(){
-				if(this.ruleForm.yzm == this.yzm2){
-					var url = this.axios.urls.LCCCSSM_SELECTPHONEJS;
-					this.axios.post(url, this.ruleForm).then(resp => {
-						if (0 == resp.data.code) {
-							this.$router.push({
-								path: '/index'
-							});
-						} else {
-							this.$message.error("该手机账号不存在！");
-						}
-					}).catch(resp => {
-						this.$message.error('登录超时，请稍后重试！');
-					});
-				}else{
-					this.$message.error('验证码错误！');
-				}
+		methods:{
+			
+		},
+		computed: {
+			resturantName: function() {
+				return this.$store.state.resturantName; //不建议
 			}
 		}
-
 	}
 </script>
 
 <style>
-	.codeGeting {
-		background: #cdcdcd;
-		border-color: #cdcdcd;
-	}
-
 	.login-wrap {
 		box-sizing: border-box;
 		width: 100%;
