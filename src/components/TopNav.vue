@@ -12,8 +12,7 @@
 							<el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
 							{{resturantName}}
 						</template>
-						<el-menu-item index="UserAccount">账户信息</el-menu-item>
-						<el-menu-item index="UserInfo">个人资料</el-menu-item>
+						<el-menu-item index="AppMainToo">管理账户</el-menu-item>
 						<el-menu-item @click="OUT()">退出</el-menu-item>
 					</el-submenu>
 				</el-menu-item>

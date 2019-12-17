@@ -14,6 +14,7 @@
 
 <script>
   export default {
+		name:'MenuLeftNav',
     data: function() {
       return {
         collapsed: false,

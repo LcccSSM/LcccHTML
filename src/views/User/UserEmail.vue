@@ -1,80 +1,22 @@
 <template>
 	<div class="login-container" style="width: 45%;">
-		<el-form :model="ruleForm" status-icon ref="ruleForm">
-			<div style="margin-top: -3px;">
-				<b>您的基础信息：</b>
-			</div>
-			<div style="margin-top: 20px; margin-left: 30px;">
-				用户名：{{resturantName}}
-			</div>
-			<div style="margin-top: 20px; margin-left: 30px;">
-				<div v-if="this.ruleForm.phone !='' ">
-					绑定的手机号码：{{this.ruleForm.phone}}
-					<!-- <el-link style="margin-left: 20px;" type="primary" @click="upwphone()">修改手机号码</el-link> -->
-				</div>
-				<div v-else-if="this.ruleForm.phone =='' ">
-					绑定的手机号码：未绑定
-					<el-link style="margin-left: 20px;" type="primary">绑定手机号码</el-link>
-				</div>
-			</div>
-			<el-divider></el-divider>
-			<div style="margin-top: 20px;">
-				<b>您的安全服务：</b>
-			</div>
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="width: 350px;" class="demo-dynamic">
+			<el-form-item prop="email" label="邮箱">
+				<!-- 	[
+				{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+				{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+			] -->
+				<el-input v-model="ruleForm.email"></el-input>
+			</el-form-item>
 
-			<div style="margin-top: 35px; margin-left: 30px;">
-				身份证认证：
-				<div v-if="this.ruleForm.realnamecheck == 1">
-					<el-link style="margin-left: 30px; " type="primary">查看</el-link>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
-				</div>
-				<div v-else-if="this.ruleForm.realnamecheck == 0">
-					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">身份证认证</el-link>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
-				</div>
-			</div>
-
-			<div style="margin-top: 35px; margin-left: 30px;">
-				登录密码：
-				<el-link style="margin-left: 165px;" type="primary">
-					<router-link to="/UserPassword"> 修改密码 </router-link>
-				</el-link>
-				<span><img align="right" style="margin-top: -25px;" src="../../assets/ysz.png" /> </span>
-			</div>
-			<div style="margin-top: 35px; margin-left: 30px;">
-				邮箱认证：
-				<div v-if="this.ruleForm.emailcheck == 1">
-					<el-popover placement="top-start" width="200" trigger="hover" :content="this.ruleForm.email">
-						<el-link slot="reference" style="margin-top: -20px;margin-left: 250px;" type="primary">查看</el-link>
-					</el-popover>
-					<el-link style="margin-left: 350px; margin-top: -38px;" type="primary">
-						<router-link to="/UserEmail"> 修改邮箱 </router-link>
-					</el-link>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
-				</div>
-				<div v-else-if="this.ruleForm.emailcheck == 0">
-					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">
-						<router-link to="/UserEmail"> 绑定 </router-link>
-					</el-link>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
-				</div>
-
-			</div>
-			<div style="margin-top: 35px; margin-left: 30px;">
-				绑定手机：
-				<div v-if=" this.ruleForm.phonecheck == 1">
-					<el-link style="margin-left: 250px;margin-top: -20px;" type="primary">
-						<router-link to="/UserPhone"> 修改手机号码 </router-link>
-					</el-link>
-					<el-dialog title="修改手机号码" :visible.sync="dialogFormVisible" style="width:1200px; margin-left: 170px;">
-					</el-dialog>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/ybd.png" /> </span>
-				</div>
-				<div v-else-if=" this.ruleForm.phonecheck == 0">
-					<el-link style="margin-left: 250px;" type="primary">绑定手机号码</el-link>
-					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
-				</div>
-			</div>
+			<el-form-item>
+				<el-input style="width:53%" placeholder="请输入验证码" v-model="yzm"></el-input>
+				<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="submitForm()">提交</el-button>
+				<el-button @click="resetForm('ruleForm')">重置</el-button>
+			</el-form-item>
 		</el-form>
 	</div>
 </template>
@@ -83,38 +25,107 @@
 	import axios from 'axios'
 	import qs from 'qs'
 	export default {
-		name: 'UserAccount',
+		name: 'UserEmail',
 		data() {
+			var email = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入邮箱地址'));
+				} else {
+					var url = this.axios.urls.LCCCSSM_SELECTEMAIL;
+					this.axios.post(url, this.ruleForm).then(resp => {
+						if (0 == resp.data.code) { // 0 已注册      1  未注册
+							this.disable = true;
+							callback(new Error(resp.data.message));
+						} else {
+							this.disable = false;
+						}
+					}).catch(resp => {
+						this.$message.error('查询邮箱是否注册操作失败，请稍后重试！');
+					});
+				}
+			};
 			return {
-				phone2:'',
+				yzm: '',
+				yzm2: '',
+				getCode: '获取验证码',
+				isGeting: false,
+				count: 60,
+				disable: false,
 				ruleForm: {
-					username: '', //用户名
-					phone: '', //手机号
-					emailcheck: '', //邮箱绑定
-					phonecheck: '', //手机号码绑定
-					realnamecheck: '', //身份认证绑定
+					username: this.$store.state.resturantName,
+					email: ''
 				},
+				rules: {
+					email: [{
+							validator: email,
+							trigger: 'blur'
+						},
+						{
+							type: 'email',
+							message: '请输入正确的邮箱地址',
+							trigger: ['blur', 'change']
+						}
+					]
+				}
 			};
 		},
 		methods: {
-			look: function() {
-				var url = this.axios.urls.LCCCSSM_SELECTNAME;
-				this.ruleForm.username = this.$store.state.resturantName;
-				this.axios.post(url, this.ruleForm).then(resp => {
-					this.ruleForm = resp.data;
-					// this.phone2 = resp.data.phone;
-				}).catch(resp => {
-					this.$message.error('查看操作失败！');
-				});
+			submitForm: function() {
+				// 提交
+				if (this.yzm = this.yzm2) {
+					var url = this.axios.urls.LCCCSSM_ADDUSEREMAIL;
+					this.axios.post(url, this.ruleForm).then(resp => {
+						if (1 == resp.data.code) {
+							this.$message({
+								message: '绑定邮箱成功',
+								type: 'success'
+							});
+							this.$router.push({
+								path: '/UserAccount'
+							});
+						} else {
+							this.$message.error('绑定邮箱失败');
+						}
+					}).catch(resp => {
+						this.$message.error('绑定邮箱操作失败，请稍后重试！');
+					});
+				} else {
+					this.$message.error('验证码错误');
+				}
 			},
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
+			getVerifyCode() {
+				var url = this.axios.urls.LCCCSSM_EMAILYZM;
+				this.axios.post(url, this.ruleForm).then(resp => {
+					if (1 == resp.data.code) {
+						this.yzm2 = resp.data.message;
+					} else {
+						this.$message.error('短信发送失败');
+					}
+				}).catch(resp => {
+					this.$message.error('验证码操作失败，请稍后重试！');
+				});
+				var countDown = setInterval(() => {
+					if (this.count < 1) {
+						this.isGeting = false;
+						this.disable = false;
+						this.getCode = '获取验证码';
+						this.count = 60;
+						clearInterval(countDown);
+					} else {
+						this.isGeting = true;
+						this.disable = true;
+						this.getCode = this.count-- + 's后重发';
+					}
+				}, 1000);
+			}
 		},
 		computed: {
 			resturantName: function() {
 				return this.$store.state.resturantName; //不建议
-			},
-		},
-		created: function() {
-			this.look();
+			}
 		}
 	}
 </script>

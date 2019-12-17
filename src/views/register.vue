@@ -60,7 +60,6 @@
 				} else if (!(/^1[3456789]\d{9}$/.test(value))) {
 					callback(new Error('手机号格式不正确！'));
 				} else {
-					callback();
 					var url = this.axios.urls.LCCCSSM_SELECTPHONEJS;
 					this.axios.post(url, this.ruleForm).then(resp => {
 						if (0 == resp.data.code) {
@@ -79,10 +78,8 @@
 						} else {
 							callback();
 						}
-						console.log(resp);
 					}).catch(resp => {
-						console.log(resp);
-						this.$message.error('查询用户名操作失败！');
+						this.$message.error('查询手机号操作失败！');
 					});
 				}
 			};
@@ -183,9 +180,7 @@
 						} else {
 							this.$message.error(resp.data.message);
 						}
-						console.log(resp);
 					}).catch(resp => {
-						console.log(resp);
 						this.$message.error('操作失败！');
 					});
 				} else {
@@ -195,14 +190,9 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-			YZM: function() {
-
-			},
 			getVerifyCode() {
 				var url = this.axios.urls.LCCCSSM_YZM;
-				alert("phone:" + this.ruleForm.phone);
 				this.axios.post(url, this.ruleForm).then(resp => {
-					alert("后台交互");
 					if (1 == resp.data.code) {
 						this.yzm2 = resp.data.message;
 					} else {
@@ -225,7 +215,6 @@
 						this.getCode = this.count-- + 's后重发';
 					}
 				}, 1000);
-
 			}
 		}
 
