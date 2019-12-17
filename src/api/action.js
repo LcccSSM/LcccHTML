@@ -21,8 +21,15 @@ export default {
   'SYSTEM_LOAN_BYUPDATE': '/loan_ByUpdate', //修改借款信息
   'SYSTEM_LOAN_BYDEL': '/loan_ByDel', //删除借款信息
   'SYSTEM_LOAN_BYADD': '/loan_ByAdd', //添加借款信息
-	
-	
+
+  //用户账号系列
+  'SYSTEM_TUSER_GETBYA': '/tUser_getBya', //添加借款信息
+  'SYSTEM_UACONUT_GETBYNAME': '/uAconut_getByName', //添加借款信息
+
+  //充值
+  'SYSTEM_BANK_RECHARGE': '/Bank_Recharge', //充值
+
+
 	//用户系列
 	'LCCCSSM_ADDUSER': '/addUser',//用户注册
 	'LCCCSSM_YZM': '/YZM',//手机短信

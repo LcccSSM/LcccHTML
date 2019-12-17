@@ -6,6 +6,8 @@ import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Phone from '@/views/Phone'
 import BorrowingIndex from '@/views/borrowing/borrowingIndex'
+import LoantIndex from '@/views/loan/LoantIndex'
+import DictIndex from '@/views/dict/DictIndex'
 import AppMain from '@/views/AppMain'
 import Index from '@/views/index'
 import UserInfo from '@/views/User/UserInfo'
@@ -33,16 +35,16 @@ export default new Router({
 					name: 'BorrowingIndex',
 					component: BorrowingIndex
 				},
-				{ //注册
-					path: '/Login',
-					name: "Login",
-					component: Login,
-				},
-				{
-					path: '/Register',
-					name: 'Register',
-					component: Register
-				},
+				// { //注册
+				// 	path: '/Login',
+				// 	name: "Login",
+				// 	component: Login,
+				// },
+				// {
+				// 	path: '/Register',
+				// 	name: 'Register',
+				// 	component: Register
+				// },
 				{
 					path: '/Phone',
 					name: 'Phone',
@@ -58,6 +60,21 @@ export default new Router({
 					name: 'UserAccount',
 					component: UserAccount
 				},
+        {
+        	path: '/HelloWorld',
+        	name: 'HelloWorld',
+        	component: HelloWorld
+        },
+        {
+        	path: '/loan/LoantIndex',
+        	name: 'LoantIndex',
+        	component: LoantIndex
+        },
+        {
+        	path: '/dict/DictIndex',
+        	name: 'DictIndex',
+        	component: DictIndex
+        },
 			]
 		},
 		{ //注册
