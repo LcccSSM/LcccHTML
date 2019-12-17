@@ -1,59 +1,138 @@
 <template>
-		<!-- <div class="login-wrap"> -->
-			<div class="login-container" :model="ruleForm">
-				<el-form :model="ruleForm" ref="ruleForm" style="margin-left: 50px;"  >
-					<div style="margin-top: -3px;">
-						<b>当前头像:</b>
-					</div>
-					<el-avatar style="margin-left: 150px;" shape="square" :size="100" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-					<div style="margin-top: 15px; ">
-						<b>昵称： </b>
-						<b style="margin-left: 130px;">{{resturantName}}</b>
-					</div>
-					<div style="margin-top: 20px;">
-						<b>账户总额： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.totalmoney}}元</b>
-					</div>
-					<div style="margin-top: 25px;">
-						<b>待还金额： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.unReturnAmoney}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>单期还款： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.unReturnAmount}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>授信额度： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.borrowLimit}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>剩余授信额度： </b>
-						<b style="margin-left: 55px;">{{this.ruleForm.remainBorrowLimit}}元</b>
-					</div>
-				</el-form>
-			</div>
-		<!-- </div> -->
+	<div class="login-container" style="width: 45%;">
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="width: 350px;" class="demo-dynamic">
+			<el-form-item prop="loginpass">
+				<el-input placeholder="请输入旧密码" type="password" v-model="ruleForm.loginpass"></el-input>
+			</el-form-item>
+			<el-form-item prop="loginpass2">
+				<el-input placeholder="请输入新密码" type="password" v-model="ruleForm.loginpass2"></el-input>
+			</el-form-item>
+			<el-form-item prop="loginpass3">
+				<el-input placeholder="请确认新密码" type="password" v-model="ruleForm.loginpass3"></el-input>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="submitForm()">提交</el-button>
+				<el-button @click="resetForm('ruleForm')">重置</el-button>
+			</el-form-item>
+		</el-form>
+	</div>
 </template>
 
 <script>
 	import axios from 'axios'
 	import qs from 'qs'
 	export default {
-		name: 'UserInfo',
+		name: 'UserPassword',
 		data() {
+			var loginpass = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入旧密码'));
+				} else {
+					callback();
+				}
+			};
+			var loginpass2 = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入新密码'));
+				} else {
+					callback();
+				}
+			};
+			var loginpass3 = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请再次输入密码'));
+				} else if (value !== this.ruleForm.loginpass2) {
+					callback(new Error('两次输入密码不一致!'));
+				} else {
+					callback();
+				}
+			};
 			return {
-				ruleForm:{
-					username:'',//用户昵称
-					totalmoney:'',//资金总额
-					unReturnAmoney:'',//待还总额
-					unReturnAmount:'',//单期还款
-					borrowLimit:'',//授信额度
-					remainBorrowLimit:'',//剩余授信额度
+				ruleForm: {
+					username: this.$store.state.resturantName,
+					loginpass: '', //旧密码
+					loginpass2: '', //新密码
+					loginpass3: '', //确认新密码
+				},
+				rules: {
+					loginpass: [{
+							validator: loginpass,
+							trigger: 'blur'
+						},
+						{
+							min: 3,
+							max: 16,
+							message: '长度在 8 到 16 个字符',
+							trigger: 'blur'
+						}
+					],
+					loginpass2: [{
+							validator: loginpass2,
+							trigger: 'blur'
+						},
+						{
+							min: 8,
+							max: 16,
+							message: '长度在 8 到 16 个字符',
+							trigger: 'blur'
+						}
+					],
+					loginpass3: [{
+							validator: loginpass3,
+							trigger: 'blur'
+						},
+						{
+							min: 8,
+							max: 16,
+							message: '长度在 8 到 16 个字符',
+							trigger: 'blur'
+						}
+					]
 				}
 			};
 		},
-		methods:{
-			
+		methods: {
+			submitForm: function() {
+				// 提交
+				if(this.ruleForm.loginpass2 == this.ruleForm.loginpass3){
+					var url = this.axios.urls.LCCCSSM_SELECTNAMEPASS;
+					var form ={
+						username:this.ruleForm.username,
+						loginpass:this.ruleForm.loginpass
+					}
+					this.axios.post(url, form).then(resp => {
+						if (1 == resp.data.code) {
+							var url = this.axios.urls.LCCCSSM_UPDATAUSERPASS;
+							var form2 = {
+								username:this.ruleForm.username,
+								loginpass:this.ruleForm.loginpass2
+							}
+							this.axios.post(url, form2).then(resp => {
+								if (1 == resp.data.code) {
+									this.$message({
+										message: '修改密码成功',
+										type: 'success'
+									});
+									this.$router.push({
+										path: '/UserAccount'
+									});	
+								}else{
+									this.$message.error("修改密码失败，请重试");
+								}
+							}).catch(resp => {
+								this.$message.error('修改密码操作失败，请稍后重试！');
+							});
+						}else{
+							this.$message.error("旧密码错误！");
+						}
+					}).catch(resp => {
+						this.$message.error('验证旧密码操作失败，请重试！');
+					});
+				}
+			},
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
 		},
 		computed: {
 			resturantName: function() {
@@ -80,7 +159,7 @@
 	.login-container {
 		border-radius: 10px;
 		margin: 0px auto;
-		width: 350px;
+		width: 550px;
 		padding: 30px 35px 15px 35px;
 		background: #fff;
 		border: 1px solid #eaeaea;

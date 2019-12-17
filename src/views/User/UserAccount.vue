@@ -1,6 +1,6 @@
 <template>
 	<div class="login-container" style="width: 45%;">
-		<el-form :model="ruleForm" status-icon  ref="ruleForm">
+		<el-form :model="ruleForm" status-icon ref="ruleForm">
 			<div style="margin-top: -3px;">
 				<b>您的基础信息：</b>
 			</div>
@@ -36,17 +36,26 @@
 
 			<div style="margin-top: 35px; margin-left: 30px;">
 				登录密码：
-				<el-link style=" margin-left: 165px;" type="primary">修改密码</el-link>
+				<el-link style="margin-left: 165px;" type="primary">
+					<router-link to="/UserPassword"> 修改密码 </router-link>
+				</el-link>
 				<span><img align="right" style="margin-top: -25px;" src="../../assets/ysz.png" /> </span>
 			</div>
 			<div style="margin-top: 35px; margin-left: 30px;">
 				邮箱认证：
 				<div v-if="this.ruleForm.emailcheck == 1">
-					<el-link style="margin-top: -20px;margin-left: 250px;" type="primary">查看</el-link>
+					<el-popover placement="top-start" width="200" trigger="hover" :content="this.ruleForm.email">
+						<el-link slot="reference" style="margin-top: -20px;margin-left: 250px;" type="primary">查看</el-link>
+					</el-popover>
+					<el-link style="margin-left: 350px; margin-top: -38px;" type="primary">
+						<router-link to="/UserEmail"> 修改邮箱 </router-link>
+					</el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
 				</div>
 				<div v-else-if="this.ruleForm.emailcheck == 0">
-					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary"> <router-link to="/UserEmail"> 绑定 </router-link></el-link>
+					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">
+						<router-link to="/UserEmail"> 绑定 </router-link>
+					</el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
 				</div>
 
@@ -54,7 +63,9 @@
 			<div style="margin-top: 35px; margin-left: 30px;">
 				绑定手机：
 				<div v-if=" this.ruleForm.phonecheck == 1">
-					<el-link style="margin-left: 250px;margin-top: -20px;" type="primary" @click="upwphone()">修改手号码</el-link>
+					<el-link style="margin-left: 250px;margin-top: -20px;" type="primary">
+						<router-link to="/UserPhone"> 修改手机号码 </router-link>
+					</el-link>
 					<el-dialog title="修改手机号码" :visible.sync="dialogFormVisible" style="width:1200px; margin-left: 170px;">
 					</el-dialog>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/ybd.png" /> </span>
@@ -75,12 +86,13 @@
 		name: 'UserAccount',
 		data() {
 			return {
+				phone2:'',
 				ruleForm: {
-					username: '',//用户名
+					username: '', //用户名
 					phone: '', //手机号
-					emailcheck:'',//邮箱绑定
-					phonecheck:'',//手机号码绑定
-					realnamecheck:'',//身份认证绑定
+					emailcheck: '', //邮箱绑定
+					phonecheck: '', //手机号码绑定
+					realnamecheck: '', //身份认证绑定
 				},
 			};
 		},
@@ -90,16 +102,16 @@
 				this.ruleForm.username = this.$store.state.resturantName;
 				this.axios.post(url, this.ruleForm).then(resp => {
 					this.ruleForm = resp.data;
-					alert(this.ruleForm.emailcheck.substr(2,5));
+					// this.phone2 = resp.data.phone;
 				}).catch(resp => {
 					this.$message.error('查看操作失败！');
 				});
-			}
+			},
 		},
 		computed: {
 			resturantName: function() {
 				return this.$store.state.resturantName; //不建议
-			}
+			},
 		},
 		created: function() {
 			this.look();

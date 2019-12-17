@@ -1,59 +1,137 @@
 <template>
-		<!-- <div class="login-wrap"> -->
-			<div class="login-container" :model="ruleForm">
-				<el-form :model="ruleForm" ref="ruleForm" style="margin-left: 50px;"  >
-					<div style="margin-top: -3px;">
-						<b>当前头像:</b>
-					</div>
-					<el-avatar style="margin-left: 150px;" shape="square" :size="100" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-					<div style="margin-top: 15px; ">
-						<b>昵称： </b>
-						<b style="margin-left: 130px;">{{resturantName}}</b>
-					</div>
-					<div style="margin-top: 20px;">
-						<b>账户总额： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.totalmoney}}元</b>
-					</div>
-					<div style="margin-top: 25px;">
-						<b>待还金额： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.unReturnAmoney}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>单期还款： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.unReturnAmount}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>授信额度： </b>
-						<b style="margin-left: 87px;">{{this.ruleForm.borrowLimit}}元</b>
-					</div>
-					<div style="margin-top: 30px;">
-						<b>剩余授信额度： </b>
-						<b style="margin-left: 55px;">{{this.ruleForm.remainBorrowLimit}}元</b>
-					</div>
-				</el-form>
-			</div>
-		<!-- </div> -->
+	<div class="login-container" style="width: 43%;">
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px"  style="width: 350px;" class="demo-dynamic">
+			<el-form-item prop="phone" label="手机号">
+				<el-input v-model="ruleForm.phone" placeholder="请输入手机号码"></el-input>
+			</el-form-item>
+			<el-form-item prop="yzm">
+				<div>
+					<el-input style="width:53%; ;" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
+					<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
+				</div>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="submitForm()">提交</el-button>
+				<el-button @click="resetForm('ruleForm')">重置</el-button>
+			</el-form-item>
+		</el-form>
+	</div>
 </template>
 
 <script>
 	import axios from 'axios'
 	import qs from 'qs'
 	export default {
-		name: 'UserInfo',
+		name: 'UserPhone',
 		data() {
+			var phone = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入手机号码'));
+				} else if (!(/^1[3456789]\d{9}$/.test(value))) {
+					callback(new Error('手机号格式不正确！'));
+				} else {
+					var url = this.axios.urls.LCCCSSM_SELECTPHONEJS;
+					this.axios.post(url, this.ruleForm).then(resp => {
+						if (0 == resp.data.code) {
+							callback(new Error('该手机号已存在'));
+							this.$confirm('该手机号已注册。是否为您本人账号。', '提示', {
+								confirmButtonText: '不是，继续注册',
+								cancelButtonText: '是',
+								type: 'warning'
+							}).then(() => {
+								
+							}).catch(() => {
+								this.$router.push({
+									path: '/Phone'
+								});
+							});
+						} else {
+							callback();
+						}
+					}).catch(resp => {
+						this.$message.error('查询手机号操作失败！');
+					});
+				}
+			};
+			var yzm = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入验证码'));
+				} else {
+					callback();
+				}
+			};
 			return {
-				ruleForm:{
-					username:'',//用户昵称
-					totalmoney:'',//资金总额
-					unReturnAmoney:'',//待还总额
-					unReturnAmount:'',//单期还款
-					borrowLimit:'',//授信额度
-					remainBorrowLimit:'',//剩余授信额度
+				yzm2: '',
+				getCode: '获取验证码',
+				isGeting: false,
+				count: 60,
+				disable: false,
+				ruleForm: {
+					username:this.$store.state.resturantName,
+					phone: '', //手机号
+					yzm: '',//验证码
+				},
+				rules: {
+					phone: [{
+						validator: phone,
+						trigger: 'blur'
+					}],
+					yzm: [{
+						validator: yzm,
+						trigger: 'blur'
+					}],
 				}
 			};
 		},
-		methods:{
-			
+		methods: {
+			submitForm: function() {
+				// 提交
+				if (this.ruleForm.yzm = this.yzm2) {
+					var url = this.axios.urls.LCCCSSM_UPDATAUSER;
+					this.axios.post(url, this.ruleForm).then(resp => {
+						if (1 == resp.data.code) {
+							this.$message({
+								message: '修改手机号码成功',
+								type: 'success'
+							});
+							this.$router.push({
+								path: '/UserAccount'
+							});
+						} else {
+							this.$message.error('修改手机号码失败');
+						}
+					}).catch(resp => {
+						this.$message.error('修改手机号码操作失败，请稍后重试！');
+					});
+				} else {
+					this.$message.error('验证码错误！');
+				}
+			},
+			getVerifyCode() {
+				var url = this.axios.urls.LCCCSSM_YZM;
+				this.axios.post(url, this.ruleForm).then(resp => {
+					if (1 == resp.data.code) {
+						this.yzm2 = resp.data.message;
+					} else {
+						this.$message.error('短信发送失败！');
+					}
+				}).catch(resp => {
+					this.$message.error('验证码操作失败！');
+				});
+				var countDown = setInterval(() => {
+					if (this.count < 1) {
+						this.isGeting = false;
+						this.disable = false;
+						this.getCode = '获取验证码';
+						this.count = 60;
+						clearInterval(countDown);
+					} else {
+						this.isGeting = true;
+						this.disable = true;
+						this.getCode = this.count-- + 's后重发';
+					}
+				}, 1000);
+			}
 		},
 		computed: {
 			resturantName: function() {
@@ -80,7 +158,7 @@
 	.login-container {
 		border-radius: 10px;
 		margin: 0px auto;
-		width: 350px;
+		width: 550px;
 		padding: 30px 35px 15px 35px;
 		background: #fff;
 		border: 1px solid #eaeaea;

@@ -180,9 +180,7 @@
 						} else {
 							this.$message.error(resp.data.message);
 						}
-						console.log(resp);
 					}).catch(resp => {
-						console.log(resp);
 						this.$message.error('操作失败！');
 					});
 				} else {
@@ -194,7 +192,6 @@
 			},
 			getVerifyCode() {
 				var url = this.axios.urls.LCCCSSM_YZM;
-				alert("phone:" + this.ruleForm.phone);
 				this.axios.post(url, this.ruleForm).then(resp => {
 					if (1 == resp.data.code) {
 						this.yzm2 = resp.data.message;

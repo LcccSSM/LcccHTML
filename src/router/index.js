@@ -12,6 +12,8 @@ import UserInfo from '@/views/User/UserInfo'
 import UserAccount from '@/views/User/UserAccount'
 import AppMainToo from '@/views/AppMainToo'
 import UserEmail from '@/views/User/UserEmail'
+import UserPhone from '@/views/User/UserPhone' 
+import UserPassword from '@/views/User/UserPassword'
 Vue.use(Router)
 
 export default new Router({
@@ -70,6 +72,14 @@ export default new Router({
 						path: '/UserEmail',
 						name: 'UserEmail',
 						component: UserEmail
+					},{
+						path: '/UserPhone',
+						name: 'UserPhone',
+						component: UserPhone
+					},{
+						path: '/UserPassword',
+						name: 'UserPassword',
+						component: UserPassword
 					}]
 				},
 			]
