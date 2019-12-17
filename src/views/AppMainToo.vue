@@ -2,14 +2,13 @@
   <el-row>
 
     <el-container>
-      <el-footer>
-        <TopNav></TopNav>
-      </el-footer>
+      <el-left>
+        <MenuLeftNav></MenuLeftNav>
+      </el-left>
       <el-main>
         <router-view></router-view>
       </el-main>
     </el-container>
-		
 		
   </el-row>
 
@@ -18,7 +17,7 @@
 
 <script>
   // 1.导入组件
-  import TopNav from '@/components/TopNav.vue'
+  import MenuLeftNav from '@/components/MenuLeftNav.vue'
 
   // 导出模块
   export default {
@@ -29,7 +28,7 @@
 
     },
     components: { //2.注册组件
-      TopNav
+      MenuLeftNav
 
     },
     computed: {

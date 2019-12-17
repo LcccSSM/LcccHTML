@@ -9,7 +9,7 @@ import action from '@/api/action'
 axios.urls = action
 
 // axios默认配置
-axios.defaults.timeout = 10000; // 超时时间
+axios.defaults.timeout = 100000; // 超时时间
 // axios.defaults.baseURL = 'http://localhost:8080/j2ee15'; // 默认地址
 axios.defaults.baseURL = action.SERVER;
 

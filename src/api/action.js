@@ -31,7 +31,10 @@ export default {
 	'LCCCSSM_SELECTPHONEJS': '/selectPhoneJS',//用户注册验证手机是否已注册接口
 	'LCCCSSM_SELECTPHONE': '/selectPhone',//用户使用手机登录接口
 	'LCCCSSM_SELECTNAMEPASS': '/selectNamePass',//用户登录，账号密码登录接口
-
+	'LCCCSSM_SELECTEMAIL': '/selectEmail',//查询邮箱是否已注册接口  
+	'LCCCSSM_ADDUSEREMAIL': '/addUserEmail',//用户绑定邮箱接口
+	'LCCCSSM_EMAILYZM': '/EmailYZM',//邮箱验证码 
+	
 	//树菜单系列
 	'SYSTEM_MENU':'/listByFunction',
   'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage', //产品库存

@@ -1,7 +1,6 @@
 <template>
-	<!-- <div class="login-wrap"> -->
-	<div class="login-container" :model="ruleForm">
-		<el-form :model="ruleForm" ref="ruleForm">
+	<div class="login-container" style="width: 45%;">
+		<el-form :model="ruleForm" status-icon  ref="ruleForm">
 			<div style="margin-top: -3px;">
 				<b>您的基础信息：</b>
 			</div>
@@ -11,7 +10,7 @@
 			<div style="margin-top: 20px; margin-left: 30px;">
 				<div v-if="this.ruleForm.phone !='' ">
 					绑定的手机号码：{{this.ruleForm.phone}}
-					<el-link style="margin-left: 20px;" type="primary">修改手机号码</el-link>
+					<!-- <el-link style="margin-left: 20px;" type="primary" @click="upwphone()">修改手机号码</el-link> -->
 				</div>
 				<div v-else-if="this.ruleForm.phone =='' ">
 					绑定的手机号码：未绑定
@@ -26,7 +25,7 @@
 			<div style="margin-top: 35px; margin-left: 30px;">
 				身份证认证：
 				<div v-if="this.ruleForm.realnamecheck == 1">
-					<el-link style="margin-left: 30px;" type="primary">查看</el-link>
+					<el-link style="margin-left: 30px; " type="primary">查看</el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
 				</div>
 				<div v-else-if="this.ruleForm.realnamecheck == 0">
@@ -37,17 +36,17 @@
 
 			<div style="margin-top: 35px; margin-left: 30px;">
 				登录密码：
-				<el-link style="margin-left: 30px; margin-left: 165px;" type="primary">修改密码</el-link>
+				<el-link style=" margin-left: 165px;" type="primary">修改密码</el-link>
 				<span><img align="right" style="margin-top: -25px;" src="../../assets/ysz.png" /> </span>
 			</div>
 			<div style="margin-top: 35px; margin-left: 30px;">
 				邮箱认证：
-				<div v-if="this.ruleForm.realnamecheck == 1">
-					<el-link style="margin-left: 30px;margin-left: 250px;" type="primary">查看</el-link>
-					<span><img align="right" style="margin-top: -25px;" src="../../assets/ywc.png" /> </span>
+				<div v-if="this.ruleForm.emailcheck == 1">
+					<el-link style="margin-top: -20px;margin-left: 250px;" type="primary">查看</el-link>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
 				</div>
-				<div v-else-if="this.ruleForm.realnamecheck == 0">
-					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">绑定</el-link>
+				<div v-else-if="this.ruleForm.emailcheck == 0">
+					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary"> <router-link to="/UserEmail"> 绑定 </router-link></el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
 				</div>
 
@@ -55,39 +54,34 @@
 			<div style="margin-top: 35px; margin-left: 30px;">
 				绑定手机：
 				<div v-if=" this.ruleForm.phonecheck == 1">
-					<el-link style="margin-left: 250px;" type="primary">查看</el-link>
-					<span><img align="right" style="margin-top: -25px;" src="../../assets/ybd.png" /> </span>
+					<el-link style="margin-left: 250px;margin-top: -20px;" type="primary" @click="upwphone()">修改手号码</el-link>
+					<el-dialog title="修改手机号码" :visible.sync="dialogFormVisible" style="width:1200px; margin-left: 170px;">
+					</el-dialog>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/ybd.png" /> </span>
 				</div>
 				<div v-else-if=" this.ruleForm.phonecheck == 0">
-					<el-link style="margin-left: 250px;" type="primary">绑定号码</el-link>
-					<span><img align="right" style="margin-top: -25px;" src="../../assets/wsz.png" /> </span>
+					<el-link style="margin-left: 250px;" type="primary">绑定手机号码</el-link>
+					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
 				</div>
 			</div>
-
-
-
-
-
 		</el-form>
 	</div>
-	<!-- </div> -->
 </template>
 
 <script>
-	name: 'UserAccount'
+	import axios from 'axios'
+	import qs from 'qs'
 	export default {
+		name: 'UserAccount',
 		data() {
 			return {
 				ruleForm: {
-					username: '',
-					phone: '', //手机绑定
-					loginpass: '', //登录密码
-					email: '', //用户邮箱
-					asidcardno: '', //身份证号码
-					realnamecheck: '', //身份证认证
-					emailcheck: '', //邮箱认证
-					phonecheck: '', //手机认证
-				}
+					username: '',//用户名
+					phone: '', //手机号
+					emailcheck:'',//邮箱绑定
+					phonecheck:'',//手机号码绑定
+					realnamecheck:'',//身份认证绑定
+				},
 			};
 		},
 		methods: {
@@ -96,11 +90,9 @@
 				this.ruleForm.username = this.$store.state.resturantName;
 				this.axios.post(url, this.ruleForm).then(resp => {
 					this.ruleForm = resp.data;
-
-
+					alert(this.ruleForm.emailcheck.substr(2,5));
 				}).catch(resp => {
-					console.log(resp);
-					this.$message.error('操作失败！');
+					this.$message.error('查看操作失败！');
 				});
 			}
 		},
