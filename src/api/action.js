@@ -34,6 +34,10 @@ export default {
 	'LCCCSSM_SELECTEMAIL': '/selectEmail',//查询邮箱是否已注册接口  
 	'LCCCSSM_ADDUSEREMAIL': '/addUserEmail',//用户绑定邮箱接口
 	'LCCCSSM_EMAILYZM': '/EmailYZM',//邮箱验证码 
+	'LCCCSSM_GETSFZ': '/getSFZ',//身份证
+	'LCCCSSM_INSERTSFZ': '/insertSFZ',//增加身份证
+	'LCCCSSM_GETFACE': '/getFace',//人脸识别 
+	'LCCCSSM_UPDATEPHONE': '/updatePhone',//修改身份证已认证
 	
 	//树菜单系列
 	'SYSTEM_MENU':'/listByFunction',

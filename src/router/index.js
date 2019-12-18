@@ -12,6 +12,8 @@ import UserInfo from '@/views/User/UserInfo'
 import UserAccount from '@/views/User/UserAccount'
 import AppMainToo from '@/views/AppMainToo'
 import UserEmail from '@/views/User/UserEmail'
+import UserSFZ from '@/views/User/UserSFZ'
+
 Vue.use(Router)
 
 export default new Router({
@@ -70,6 +72,10 @@ export default new Router({
 						path: '/UserEmail',
 						name: 'UserEmail',
 						component: UserEmail
+					},{
+						path: '/UserSFZ',
+						name: 'UserSFZ',
+						component: UserSFZ
 					}]
 				},
 			]
@@ -89,5 +95,6 @@ export default new Router({
 			name: 'Phone',
 			component: Phone
 		},
+		
 	]
 })

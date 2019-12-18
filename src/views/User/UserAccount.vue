@@ -25,11 +25,11 @@
 			<div style="margin-top: 35px; margin-left: 30px;">
 				身份证认证：
 				<div v-if="this.ruleForm.realnamecheck == 1">
-					<el-link style="margin-left: 30px; " type="primary">查看</el-link>
+					<el-link style="margin-left: 250px; " type="primary">已实名</el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/ywc.png" /> </span>
 				</div>
 				<div v-else-if="this.ruleForm.realnamecheck == 0">
-					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary">身份证认证</el-link>
+					<el-link style="margin-left: 250px; margin-top: -20px;" type="primary"><router-link to="/UserSFZ">身份证认证</router-link></el-link>
 					<span><img align="right" style="margin-top: -35px;" src="../../assets/wsz.png" /> </span>
 				</div>
 			</div>

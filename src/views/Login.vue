@@ -59,7 +59,6 @@
 							trigger: 'blur'
 						}
 					]
-
 				}
 			}
 		},
@@ -102,7 +101,6 @@
 		background-position: center right;
 		background-size: 100%;
 	}
-
 	.login-container {
 		border-radius: 10px;
 		margin: 0px auto;
@@ -113,15 +111,12 @@
 		text-align: left;
 		box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
 	}
-
 	.title {
 		margin: 0px auto 40px auto;
 		text-align: center;
 		color: #505458;
 	}
-
 	.btn {
 		width: 100%;
 	}
-
 </style>
