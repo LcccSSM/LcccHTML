@@ -3,7 +3,7 @@
 
     <el-container>
       <el-left>
-        <MenuLeftNav></MenuLeftNav>
+        <MenuLeftNavTo></MenuLeftNavTo>
       </el-left>
       <el-main>
         <router-view></router-view>
@@ -17,7 +17,7 @@
 
 <script>
   // 1.导入组件
-  import MenuLeftNav from '@/components/MenuLeftNav.vue'
+  import MenuLeftNavTo from '@/components/MenuLeftNavTo.vue'
 
   // 导出模块
   export default {
@@ -28,7 +28,7 @@
 
     },
     components: { //2.注册组件
-      MenuLeftNav
+      MenuLeftNavTo
 
     },
     computed: {

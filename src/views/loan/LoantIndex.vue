@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column prop="money" label="借款金额" width="200">
       </el-table-column>
-      <el-table-column prop="timelimit" label="借款时长" width="190">
+      <el-table-column prop="timelimit" label="借款时长(月)" width="190">
       </el-table-column>
       <el-table-column prop="addtime" label="申请时间" width="190">
       </el-table-column>
@@ -93,7 +93,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer" style="align-content: center;">
         <el-button type="info" @click="colse()">取 消</el-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <el-button type="primary" @click="doMerge(rows)">通过审核</el-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" @click="doMerge()">通过审核</el-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <el-button type="danger" @click="doMerge2">拒绝审核</el-button>
       </div>
     </el-dialog>
@@ -128,8 +128,9 @@
           phone: '',
           addtime: '',
           status: 0,
-          money:0,
-          verifytime:''
+          money: 0,
+          verifytime: '',
+          timelimit: 0
         },
         rules: {
           dtype: [{
@@ -190,7 +191,7 @@
                 if (rell[k].dintro === ss[i].timelimit) {
                   count++;
                   console.log(rell[k].dcontent);
-                  ss[i].timelimit = rell[k].dcontent + "（月）";
+                  ss[i].timelimit = rell[k].dcontent;
                   ss[i].addtime = this.timestampToTime(ss[i].addtime);
 
                 }
@@ -258,35 +259,40 @@
         this.$refs['mergeForm'].validate((valid) => {
           if (valid) {
             // alert('submit!');
-            let url = this.axios.urls.SYSTEM_LOAN_BYUPDATE;
+            let url = this.axios.urls.SYSTEM_TUSER_GETBYA;
+            let url2 = this.axios.urls.SYSTEM_LOAN_BYUPDATE;
             this.axios.post(url, this.mergeForm).then(resp => {
               if (1 == resp.data) {
-                this.$message({
-                  message: '审核通过',
-                  type: 'success'
-                });
-                this.resetForm();
-                this.dialogFormVisible = false;
-                this.search();
+                this.axios.post(url2, this.mergeForm).then(resp => {
+                  if (1 == resp.data) {
+                    this.$message({
+                      message: '审核通过',
+                      type: 'success'
+                    });
+                    this.resetForm();
+                    this.dialogFormVisible = false;
+                    this.search();
+                  } else {
+                    this.$message.error("糟糕了！失败了！");
+                  }
+                  console.log(resp);
+                }).catch(resp => {});
               } else {
                 this.$message.error("糟糕了！失败了！");
               }
               console.log(resp);
-            }).catch(resp => {
-
-            });
+            }).catch(resp => {});
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-      doMerge2: function(row) {
+      doMerge2: function() {
         this.mergeForm.status = this.danger;
         this.mergeForm.verifytime = new Date().getTime();
         this.$refs['mergeForm'].validate((valid) => {
           if (valid) {
-            // alert('submit!');
             let url = this.axios.urls.SYSTEM_LOAN_BYUPDATE;
             this.axios.post(url, this.mergeForm).then(resp => {
               if (1 == resp.data) {
@@ -324,6 +330,7 @@
         this.mergeForm.status = row.status;
         this.mergeForm.addtime = new Date(row.addtime).getTime();
         this.mergeForm.money = row.money;
+        this.mergeForm.timelimit = row.timelimit;
         this.dialogFormVisible = true;
       },
       timestampToTime: function(cjsj) {

@@ -3,6 +3,9 @@
 		<el-col >
 			<el-menu router default-active="UserInfo" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
 				<el-menu-item index="UserInfo">
+					<span slot="title">账户信息</span>
+				</el-menu-item>
+				<el-menu-item index="">
 					<span slot="title">个人信息</span>
 				</el-menu-item>
 				<el-menu-item index="UserAccount">
@@ -10,9 +13,6 @@
 				</el-menu-item>
 				<el-menu-item index="2">
 					<span slot="title">银行卡</span>
-				</el-menu-item>
-				<el-menu-item index="2">
-					<span slot="title">啊啊啊</span>
 				</el-menu-item>
 			</el-menu>
 		</el-col>

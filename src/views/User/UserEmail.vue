@@ -1,7 +1,6 @@
 <template>
 	<div class="login-container" style="width: 45%;">
-		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="width: 350px;"
-		 class="demo-dynamic">
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="width: 350px;" class="demo-dynamic">
 			<el-form-item prop="email" label="邮箱">
 				<!-- 	[
 				{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
@@ -35,9 +34,9 @@
 					var url = this.axios.urls.LCCCSSM_SELECTEMAIL;
 					this.axios.post(url, this.ruleForm).then(resp => {
 						if (0 == resp.data.code) { // 0 已注册      1  未注册
-						this.disable = true;
+							this.disable = true;
 							callback(new Error(resp.data.message));
-						}else{
+						} else {
 							this.disable = false;
 						}
 					}).catch(resp => {
@@ -73,11 +72,14 @@
 		methods: {
 			submitForm: function() {
 				// 提交
-				if(this.yzm = this.yzm2){
+				if (this.yzm = this.yzm2) {
 					var url = this.axios.urls.LCCCSSM_ADDUSEREMAIL;
 					this.axios.post(url, this.ruleForm).then(resp => {
 						if (1 == resp.data.code) {
-							this.$message.error('绑定邮箱成功');
+							this.$message({
+								message: '绑定邮箱成功',
+								type: 'success'
+							});
 							this.$router.push({
 								path: '/UserAccount'
 							});
@@ -87,11 +89,9 @@
 					}).catch(resp => {
 						this.$message.error('绑定邮箱操作失败，请稍后重试！');
 					});
-				}else{  
+				} else {
 					this.$message.error('验证码错误');
 				}
-				
-				
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();

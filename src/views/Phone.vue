@@ -71,9 +71,7 @@
 		methods: {
 			getVerifyCode() {
 				var url = this.axios.urls.LCCCSSM_YZM;
-				alert("phone:" + this.ruleForm.phone);
 				this.axios.post(url, this.ruleForm).then(resp => {
-					alert(resp.data.code);
 					if (1 == resp.data.code) {
 						this.yzm2 = resp.data.message;
 					} else {
