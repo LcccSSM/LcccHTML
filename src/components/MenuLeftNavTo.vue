@@ -11,7 +11,7 @@
 				<el-menu-item index="UserAccount">
 					<span slot="title">安全设置</span>
 				</el-menu-item>
-				<el-menu-item index="2">
+				<el-menu-item index="UserBankIndex">
 					<span slot="title">银行卡</span>
 				</el-menu-item>
 			</el-menu>

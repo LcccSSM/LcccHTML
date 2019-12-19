@@ -47,7 +47,10 @@ export default {
 	'LCCCSSM_UPDATEPHONE': '/updatePhone',//修改身份证已认证
 	'LCCCSSM_UPDATAUSER': '/UpdataUser',//用户修改手机号码 
 	'LCCCSSM_UPDATAUSERPASS': '/UpdataUserPass',//用户修改手机号码
-	
+	'LCCCSSM_GETBANK': '/getBank',//获取银行卡
+	'LCCCSSM_SELECTSTATE': '/selectState',//获取身份证信息
+	'LCCCSSM_INSERBANK': '/inserBank',// 银行卡
+	'LCCCSSM_SELECTBANK': '/selectBank',// 查询银行卡
 	
 	//树菜单系列
 	'SYSTEM_MENU':'/listByFunction',

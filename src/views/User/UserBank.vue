@@ -1,48 +1,42 @@
 <template>
 	<div class="login-container" style="width: 45%;">
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="width: 350px;" class="demo-dynamic">
-			<el-form-item prop="name" label="姓名">
+			<el-form-item prop="name" label="持卡人">
 				<el-input v-model="ruleForm.name"></el-input>
 			</el-form-item>
-			<el-form-item prop="idCard" label="身份证号码">
-				<el-input v-model="ruleForm.idCard"></el-input>
+			<el-form-item prop="abank" label="卡号">
+				<el-input v-model="ruleForm.abank"></el-input>
+			</el-form-item>
+			<el-form-item prop="phone" label="预留手机号">
+				<el-input v-model="ruleForm.phone"></el-input>
+			</el-form-item>
+			<el-form-item prop="yzm">
+				<div>
+					<el-input style="width:53%; ;" placeholder="请输入验证码" v-model="ruleForm.yzm"></el-input>
+					<el-button type="primary" :disabled="disable" :class="{ codeGeting:isGeting }" @click="getVerifyCode">{{getCode}}</el-button>
+				</div>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="submitForm()">提交</el-button>
 				<el-button @click="resetForm('ruleForm')">重置</el-button>
 			</el-form-item>
 		</el-form>
-
-		<el-dialog title="" :visible.sync="dialogFormVisible">
-			<!--canvas截取流-->
-			<canvas ref="canvas" hidden="hidden" width="640" height="480"></canvas>
-			<!--图片展示-->
-			<video ref="video" width="640" height="480" autoplay></video>
-			<!--确认-->
-			<el-button size="mini" type="primary" @click="photograph">验证</el-button>
-		</el-dialog>
 	</div>
-
 </template>
 
 <script>
 	import axios from 'axios'
 	import qs from 'qs'
 	export default {
-		name: 'UserSFZ',
-		data: function() {
-			var idCard = (rule, value, callback) => {
-				if (value === "") {
-					callback(new Error("身份证号码不能为空"));
-				} else {
-					if (this.IdentityCodeValid(value)) {
-						callback();
-					} else {
-						callback(new Error("请输入正确的身份证号码"));
-					}
+		name: 'UserEmail',
+		data() {
+			var phone = (rule, value, callback) => {
+				if (value === '') {
+					callback(new Error('请输入手机号码'));
+				} else if (!(/^1[3456789]\d{9}$/.test(value))) {
+					callback(new Error('手机号格式不正确！'));
 				}
 			};
-
 			var name = (rule, value, callback) => {
 				if (value === "") {
 					callback(new Error("姓名不能为空"));
@@ -55,231 +49,140 @@
 
 				}
 			};
+			var abank = (rule, value, callback) => {
+				if (value === "") {
+					callback(new Error("银行卡号不能为空"));
+				}
+			};
 			return {
-				dialogFormVisible: false,
+				auserid: '',
+				idCard: '',
+				yzm2: '',
+				getCode: '获取验证码',
+				isGeting: false,
+				count: 60,
+				disable: false,
 				ruleForm: {
 					username: this.$store.state.resturantName,
 					name: '',
-					idCard: '',
-					asidaddress :''
+					abank: '',
+					phone: '', //手机号
+					yzm: '' //验证码
 				},
 				rules: {
-					idCard: [{
-						validator: idCard,
+					phone: [{
+						validator: phone,
 						trigger: 'blur'
 					}],
 					name: [{
 						validator: name,
 						trigger: 'blur'
+					}],
+					abank: [{
+						validator: abank,
+						trigger: 'blur'
 					}]
 				}
 			};
+
+
 		},
 		methods: {
-			IdentityCodeValid(code) { //验证身份证合法性
-				var city = {
-					11: "北京",
-					12: "天津",
-					13: "河北",
-					14: "山西",
-					15: "内蒙古",
-					21: "辽宁",
-					22: "吉林",
-					23: "黑龙江 ",
-					31: "上海",
-					32: "江苏",
-					33: "浙江",
-					34: "安徽",
-					35: "福建",
-					36: "江西",
-					37: "山东",
-					41: "河南",
-					42: "湖北 ",
-					43: "湖南",
-					44: "广东",
-					45: "广西",
-					46: "海南",
-					50: "重庆",
-					51: "四川",
-					52: "贵州",
-					53: "云南",
-					54: "西藏 ",
-					61: "陕西",
-					62: "甘肃",
-					63: "青海",
-					64: "宁夏",
-					65: "新疆",
-					71: "台湾",
-					81: "香港",
-					82: "澳门",
-					91: "国外 "
-				};
-				var tip = "";
-				var pass = true;
+			submitForm: function() {
+				if (this.ruleForm.yzm == this.yzm2) {
+					var url = this.axios.urls.LCCCSSM_SELECTNAME;
+					this.axios.post(url, this.ruleForm).then(resp => {
+						this.auserid = resp.data.userid;
+						var url = this.axios.urls.LCCCSSM_SELECTSTATE;
+						var from = {
+							auserid: this.auserid
+						}
+						this.axios.post(url, from).then(resp => {
+							this.idCard = resp.data.asidcardno;
+							var url = this.axios.urls.LCCCSSM_GETBANK;
+							var from = {
+								bankId: this.ruleForm.abank,
+								idCard: this.idCard,
+								mobile: this.ruleForm.phone,
+								name: this.ruleForm.name
+							}
+							this.axios.post(url, from).then(resp => {
+								var url = this.axios.urls.LCCCSSM_INSERBANK;
+								var from = {
+									auserid: this.auserid,
+									abank: this.ruleForm.abank,
+									banktype: resp.data.cardType,
+									abankphone: this.ruleForm.phone,
+									bankname : resp.data.bank
+								}
+								this.axios.post(url, from).then(resp => {
+									if (resp.data === 1) {
+										alert("添加成功")
+										this.$router.push({
+											path: '/UserBankIndex'
+										});
+									}
+								})
 
-				var patt1 = new RegExp(
-					"(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$)"
-				);
-				if (!code || !patt1.test(code)) {
-					tip = "身份证号格式错误";
-					pass = false;
-				} else if (!city[code.substr(0, 2)]) {
-					tip = "地址编码错误";
-					pass = false;
-				} else {
-					//18位身份证需要验证最后一位校验位
-					if (code.length == 18) {
-						code = code.split('');
-						//∑(ai×Wi)(mod 11)
-						//加权因子
-						var factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
-						//校验位
-						var parity = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2];
-						var sum = 0;
-						var ai = 0;
-						var wi = 0;
-						for (var i = 0; i < 17; i++) {
-							ai = code[i];
-							wi = factor[i];
-							sum += ai * wi;
-						}
-						var last = parity[sum % 11];
-						if (parity[sum % 11] != code[17]) {
-							tip = "校验位错误";
-							pass = false;
-						}
-					}
+							})
+						});
+					});
 				}
-				if (!pass)
-					this.$message({
-						message: tip,
-						type: "error",
-						duration: 2000
-					});;
-				return pass;
 			},
 			resetForm(formName) {
-
 				this.$refs[formName].resetFields();
 			},
-			submitForm: function() {
-				var url = this.axios.urls.LCCCSSM_GETSFZ;
+			getVerifyCode() {
+				var url = this.axios.urls.LCCCSSM_YZM;
 				this.axios.post(url, this.ruleForm).then(resp => {
-					if (resp.data.result.description === '一致') {
-						this.ruleForm.asidaddress = resp.data.result.address;
-						this.dialogFormVisible = true;
-						this.callCamera();
+					if (1 == resp.data.code) {
+						this.yzm2 = resp.data.message;
 					} else {
-						this.$message.error('身份证号码或姓名错误');
+						this.$message.error('短信发送失败');
 					}
 				}).catch(resp => {
-					this.$message.error('绑定身份证失败，请稍后重试！');
+					this.$message.error('验证码操作失败，请稍后重试！');
 				});
-
-			}, // 调用摄像头
-			callCamera: function() {
-				// H5调用电脑摄像头API
-				navigator.mediaDevices.getUserMedia({
-					video: true
-				}).then(success => {
-					// 摄像头开启成功
-					this.$refs['video'].srcObject = success
-					// 实时拍照效果
-					this.$refs['video'].play()
-				}).catch(error => {
-					console.error('摄像头开启失败，请检查摄像头是否可用！')
-				})
+				var countDown = setInterval(() => {
+					if (this.count < 1) {
+						this.isGeting = false;
+						this.disable = false;
+						this.getCode = '获取验证码';
+						this.count = 60;
+						clearInterval(countDown);
+					} else {
+						this.isGeting = true;
+						this.disable = true;
+						this.getCode = this.count-- + 's后重发';
+					}
+				}, 1000);
 			},
-			// 拍照
-			photograph: function() {
-				let ctx = this.$refs['canvas'].getContext('2d')
-				// 把当前视频帧内容渲染到canvas上
-				ctx.drawImage(this.$refs['video'], 0, 0, 640, 480)
-				// 转base64格式、图片格式转换、图片质量压缩
-				let imgBase64 = this.$refs['canvas'].toDataURL('image/jpeg', 0.7)
-				console.log(imgBase64)
-
-				// 上传拍照信息  调用接口上传图片 .........
-				var url = this.axios.urls.LCCCSSM_GETFACE;
-				var from = {
-					idCard: this.ruleForm.idCard,
-					name: this.ruleForm.name,
-					image: imgBase64
-				}
-				this.axios.post(url, from).then(resp => {
-					if (resp.data.code === 200) {
-
-						var url = this.axios.urls.LCCCSSM_SELECTNAME;
-						// 调用查询用户
-						this.axios.post(url, this.ruleForm).then(resp => {
-							var url = this.axios.urls.LCCCSSM_INSERTSFZ;
-							var from2 = {
-								auserid: resp.data.userid,
-								arealname: this.ruleForm.name,
-								asidcardno: this.ruleForm.idCard,
-								asidaddress : this.ruleForm.asidaddress
-							}
-
-
-							// 调用增加接口
-							this.axios.post(url, from2).then(resp => {
-								if (resp.data === 1) {
-									var url = this.axios.urls.LCCCSSM_SELECTNAME;
-									// 调用查询用户
-									this.axios.post(url, this.ruleForm).then(resp => {
-										var from3 = {
-											userid: resp.data.userid,
-											realnamecheck: 1
-										}
-										var url = this.axios.urls.LCCCSSM_UPDATEPHONE;
-										this.axios.post(url, from3).then(resp => {
-											if (resp.data === 1) {
-												alert('认证成功，将进行页面跳转')
-												this.$router.push({
-													path: '/UserAccount'
-												});
-											}
-										}).catch(resp => {
-											this.$message.error('系统错误，请稍后重试！');
-										});
-									}).catch(resp => {
-										this.$message.error('系统错误，请稍后重试！');
-									});
-								} else {
-									console.log("增加失败");
-								}
-							}).catch(resp => {
-								this.$message.error('系统错误，请稍后重试！');
+			getBank: function() {
+				var url = this.axios.urls.LCCCSSM_SELECTNAME;
+				this.axios.post(url, this.ruleForm).then(resp => {
+					var url = this.axios.urls.LCCCSSM_SELECTBANK;
+					var from = {
+						auserid: resp.data.userid
+					}
+					this.axios.post(url, from).then(resp => {
+						console.log(resp.data.length);
+						if(resp.data.length!=0){
+							this.$router.push({
+								path: '/UserBankIndex'
 							});
-						}).catch(resp => {
-							this.$message.error('系统错误，请稍后重试！');
-						});
-						this.closeCamera();
-						this.dialogFormVisible = false;
-					} else {
-						this.$message.error('和上传的身份证不符');
-					}
-				}).catch(resp => {
-					this.$message.error('认证失败，请稍后重试！');
-				});
-			},
-			// 关闭摄像头
-			closeCamera: function() {
-				if (!this.$refs['video'].srcObject) return
-				let stream = this.$refs['video'].srcObject
-				let tracks = stream.getTracks()
-				tracks.forEach(track => {
-					track.stop()
+						}
+					})
 				})
-				this.$refs['video'].srcObject = null
-			},
-
+			}
 
 		},
 		computed: {
 			resturantName: function() {
 				return this.$store.state.resturantName; //不建议
 			}
+		},
+		created: function() {
+			// this.getBank()
 		}
 	}
 </script>

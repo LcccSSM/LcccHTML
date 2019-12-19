@@ -17,6 +17,8 @@ import UserEmail from '@/views/User/UserEmail'
 import UserSFZ from '@/views/User/UserSFZ'
 import UserPhone from '@/views/User/UserPhone'
 import UserPassword from '@/views/User/UserPassword'
+import UserBank from '@/views/User/UserBank'
+import UserBankIndex from '@/views/User/UserBankIndex'
 Vue.use(Router)
 
 export default new Router({
@@ -90,6 +92,16 @@ export default new Router({
 							path: '/UserPassword',
 							name: 'UserPassword',
 							component: UserPassword
+						}, 
+						{
+							path: '/UserBank',
+							name: 'UserBank',
+							component: UserBank
+						}, 
+						{
+							path: '/UserBankIndex',
+							name: 'UserBankIndex',
+							component: UserBankIndex
 						}
 					]
 				},
