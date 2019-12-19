@@ -26,6 +26,9 @@ export default {
   'SYSTEM_TUSER_GETBYA': '/tUser_getBya', //添加借款信息
   'SYSTEM_UACONUT_GETBYNAME': '/uAconut_getByName', //添加借款信息
 
+  //还款
+  'SYSTEM_FINREPAY_REPAYMENT': '/finRepay_repayment', //还款
+
   //充值
   'SYSTEM_BANK_RECHARGE': '/Bank_Recharge', //充值
 
@@ -38,7 +41,7 @@ export default {
 	'LCCCSSM_SELECTPHONEJS': '/selectPhoneJS',//用户注册验证手机是否已注册接口
 	'LCCCSSM_SELECTPHONE': '/selectPhone',//用户使用手机登录接口
 	'LCCCSSM_SELECTNAMEPASS': '/selectNamePass',//用户登录，账号密码登录接口
-	'LCCCSSM_SELECTEMAIL': '/selectEmail',//查询邮箱是否已注册接口  
+	'LCCCSSM_SELECTEMAIL': '/selectEmail',//查询邮箱是否已注册接口
 	'LCCCSSM_ADDUSEREMAIL': '/addUserEmail',//用户绑定邮箱接口
 	'LCCCSSM_EMAILYZM': '/EmailYZM',//邮箱验证码 
 	'LCCCSSM_GETSFZ': '/getSFZ',//身份证
@@ -52,6 +55,8 @@ export default {
 	'LCCCSSM_INSERBANK': '/inserBank',// 银行卡
 	'LCCCSSM_SELECTBANK': '/selectBank',// 查询银行卡
 	
+
+
 	//树菜单系列
 	'SYSTEM_MENU':'/listByFunction',
   'SYSTEM_GETSTORAGE': '/lccc/lcccStorageAction_getStorage', //产品库存
