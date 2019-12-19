@@ -33,25 +33,40 @@
           <br />
           <div align="center">
             <el-button @click="ba()">充值</el-button>
-            <el-button @click="ba()">还款</el-button>
+            <el-button @click="bb()">还款</el-button>
           </div>
         </div>
       </el-form>
 
     </div>
-    <!-- 模态框 -->
+    <!-- 充值模态框 -->
     <el-dialog :title="dialogTitle" status-icon :visible.sync="dialogFormVisible" center="true" @close="colse()">
       <el-form :model="mergeForm" :rules="rules" ref="mergeForm" label-width="80px">
         <el-form-item label="金额" prop="money">
           <el-input v-model.number="mergeForm.money" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="交易密码" prop="bpassword">
-          <el-input v-model.number="mergeForm.bpassword" autocomplete="off"></el-input>
+          <el-input type="password" v-model.number="mergeForm.bpassword" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" style="align-content: center;">
         <el-button type="info" @click="colse()">取 消</el-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <el-button type="primary" @click="doMerge()">确认</el-button>
+      </div>
+    </el-dialog>
+    <!-- 还款模态框 -->
+    <el-dialog :title="dialogTitle2" status-icon :visible.sync="dialogFormVisible2" center="true" @close="colse2()">
+      <el-form :model="mergeForm" :rules="rules" ref="mergeForm" label-width="80px">
+        <el-form-item label="金额" prop="money">
+          <el-input v-model.number="mergeForm.money" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="交易密码" prop="bpassword">
+          <el-input type="password" v-model.number="mergeForm.bpassword" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer" style="align-content: center;">
+        <el-button type="info" @click="colse2()">取 消</el-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" @click="doMerge2()">确认</el-button>
       </div>
     </el-dialog>
   </div>
@@ -72,11 +87,7 @@
           if (!Number.isInteger(value)) {
             callback(new Error('请输入正确的格式!'));
           } else {
-            if (value.lenght != 6) {
-              callback(new Error('支付密码为6位！'));
-            } else {
               callback();
-            }
           }
         }, 10);
       };
@@ -88,7 +99,7 @@
           if (!Number.isInteger(value)) {
             callback(new Error('请输入正确的格式!'));
           } else {
-            if (value > 99999.99) {
+            if (parseInt(value) > 99999.99) {
               callback(new Error('单笔充值最高为99999.99'));
             } else {
               callback();
@@ -99,7 +110,9 @@
       return {
         username: '',
         dialogFormVisible: false,
+        dialogFormVisible2: false,
         dialogTitle: '充值',
+        dialogTitle2: '还款',
         name: '',
         mergeForm: {
           bpassword: '',
@@ -147,8 +160,15 @@
       ba: function() {
         this.dialogFormVisible = true;
       },
+      bb: function() {
+        this.dialogFormVisible2 = true;
+      },
       colse: function() {
         this.dialogFormVisible = false;
+        this.resetForm();
+      },
+      colse2: function() {
+        this.dialogFormVisible2 = false;
         this.resetForm();
       },
       doMerge: function() {
@@ -167,13 +187,48 @@
               type: 'success',
               center: true
             });
+            this.search();
             this.resetForm();
           } else if (3 == resp.data) {
             this.$message.error('密码错误!');
             this.resetForm();
+            this.search();
           } else {
             this.$message.error('奥利给！报错了！!');
             this.resetForm();
+            this.search();
+          }
+
+        }).catch(resp => {
+          console.log(resp);
+        });
+      },
+      doMerge2: function() {//还款
+        let re = {
+          username: this.username,
+          password: this.mergeForm.bpassword,
+          totalmoney: this.mergeForm.money
+        }
+        let url = this.axios.urls.SYSTEM_FINREPAY_REPAYMENT;
+        console.log(re);
+        this.axios.post(url,this.re).then(resp => {
+          if (1 == resp.data) {
+            this.dialogFormVisible2 = false;
+            // this.$message({
+            //   message: '充值成功！',
+            //   type: 'success',
+            //   center: true
+            // });
+            // this.search();
+            // this.resetForm();
+          } else if (3 == resp.data) {
+            this.$message.error('密码错误!');
+            this.resetForm();
+            this.search();
+          } else {
+            this.$message.error('奥利给！报错了！!');
+            this.resetForm();
+            this.search();
           }
 
         }).catch(resp => {
