@@ -43,8 +43,12 @@ export default {
 	'LCCCSSM_SELECTNAMEPASS': '/selectNamePass',//用户登录，账号密码登录接口
 	'LCCCSSM_SELECTEMAIL': '/selectEmail',//查询邮箱是否已注册接口
 	'LCCCSSM_ADDUSEREMAIL': '/addUserEmail',//用户绑定邮箱接口
-	'LCCCSSM_EMAILYZM': '/EmailYZM',//邮箱验证码
-	'LCCCSSM_UPDATAUSER': '/UpdataUser',//用户修改手机号码
+	'LCCCSSM_EMAILYZM': '/EmailYZM',//邮箱验证码 
+	'LCCCSSM_GETSFZ': '/getSFZ',//身份证
+	'LCCCSSM_INSERTSFZ': '/insertSFZ',//增加身份证
+	'LCCCSSM_GETFACE': '/getFace',//人脸识别 
+	'LCCCSSM_UPDATEPHONE': '/updatePhone',//修改身份证已认证
+	'LCCCSSM_UPDATAUSER': '/UpdataUser',//用户修改手机号码 
 	'LCCCSSM_UPDATAUSERPASS': '/UpdataUserPass',//用户修改手机号码
 
 

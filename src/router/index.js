@@ -14,7 +14,8 @@ import UserInfo from '@/views/User/UserInfo'
 import UserAccount from '@/views/User/UserAccount'
 import AppMainToo from '@/views/AppMainToo'
 import UserEmail from '@/views/User/UserEmail'
-import UserPhone from '@/views/User/UserPhone' 
+import UserSFZ from '@/views/User/UserSFZ'
+import UserPhone from '@/views/User/UserPhone'
 import UserPassword from '@/views/User/UserPassword'
 Vue.use(Router)
 
@@ -58,47 +59,55 @@ export default new Router({
 					path: '/AppMainToo',
 					name: 'AppMainToo',
 					component: AppMainToo,
-					children:[{
-						path: '/',
-						name: 'UserInfo',
-						component: UserInfo
-					},{
-						path: '/UserAccount',
-						name: 'UserAccount',
-						component: UserAccount
-					},{
-						path: '/UserInfo',
-						name: 'UserInfo',
-						component: UserInfo
-					},{
-						path: '/UserEmail',
-						name: 'UserEmail',
-						component: UserEmail
-					},{
-						path: '/UserPhone',
-						name: 'UserPhone',
-						component: UserPhone
-					},{
-						path: '/UserPassword',
-						name: 'UserPassword',
-						component: UserPassword
-					}]
+					children: [{
+							path: '/',
+							name: 'UserInfo',
+							component: UserInfo
+						}, {
+							path: '/UserAccount',
+							name: 'UserAccount',
+							component: UserAccount
+						}, {
+							path: '/UserInfo',
+							name: 'UserInfo',
+							component: UserInfo
+						}, {
+							path: '/UserEmail',
+							name: 'UserEmail',
+							component: UserEmail
+						}, {
+							path: '/UserSFZ',
+							name: 'UserSFZ',
+							component: UserSFZ,
+
+						},
+						{
+							path: '/UserPhone',
+							name: 'UserPhone',
+							component: UserPhone
+						}, 
+						{
+							path: '/UserPassword',
+							name: 'UserPassword',
+							component: UserPassword
+						}
+					]
 				},
-        {
-        	path: '/HelloWorld',
-        	name: 'HelloWorld',
-        	component: HelloWorld
-        },
-        {
-        	path: '/loan/LoantIndex',
-        	name: 'LoantIndex',
-        	component: LoantIndex
-        },
-        {
-        	path: '/dict/DictIndex',
-        	name: 'DictIndex',
-        	component: DictIndex
-        },
+				{
+					path: '/HelloWorld',
+					name: 'HelloWorld',
+					component: HelloWorld
+				},
+				{
+					path: '/loan/LoantIndex',
+					name: 'LoantIndex',
+					component: LoantIndex
+				},
+				{
+					path: '/dict/DictIndex',
+					name: 'DictIndex',
+					component: DictIndex
+				},
 			]
 		},
 		{ //注册
@@ -116,5 +125,6 @@ export default new Router({
 			name: 'Phone',
 			component: Phone
 		},
+
 	]
 })
